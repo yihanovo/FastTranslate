@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- Windows SDK TFM：直接引入 WinRT API（Windows.Media.Ocr 等），设计文档 §7 风险 #6 -->
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <!-- System.Drawing / Clipboard 需要 WinForms 兼容层 -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- LibraryImport 源生成器需要 -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\tray.ico</ApplicationIcon>
+    <AssemblyName>SnapTranslate</AssemblyName>
+    <RootNamespace>SnapTranslate</RootNamespace>
+    <Version>0.1.0</Version>
+    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 托盘图标（设计文档选型：Hardcodet.NotifyIcon.Wpf） -->
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\tray.ico" />
+  </ItemGroup>
+
+</Project>

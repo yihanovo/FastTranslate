@@ -1,0 +1,214 @@
+<Window x:Class="SnapTranslate.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SnapTranslate 设置"
+        Width="480" SizeToContent="Height"
+        MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#F4F6F8"
+        ShowInTaskbar="True">
+
+    <Window.Resources>
+        <!-- 分组卡片 -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.12" Color="#57606A"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 分组标题 -->
+        <Style x:Key="GroupTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1F2328"/>
+            <Setter Property="Margin" Value="2,0,0,10"/>
+        </Style>
+        <!-- 行主标签 -->
+        <Style x:Key="RowLabel" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#24292F"/>
+        </Style>
+        <!-- 行说明文字 -->
+        <Style x:Key="RowHint" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#8B949E"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <!-- 次要按钮 -->
+        <Style x:Key="SecondaryBtn" TargetType="Button">
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#57606A"/>
+            <Setter Property="BorderBrush" Value="#D0D7DE"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <!-- 主按钮 -->
+        <Style x:Key="PrimaryBtn" TargetType="Button">
+            <Setter Property="Padding" Value="24,7"/>
+            <Setter Property="Background" Value="#2D7DD2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="20,16,20,16">
+
+        <!-- ══ 分组：快捷键 ══ -->
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <TextBlock Text="⚡ 快捷键" Style="{StaticResource GroupTitle}"/>
+
+                <!-- 启用开关 -->
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="启用全局快捷键" Style="{StaticResource RowLabel}"/>
+                        <TextBlock Text="关闭后将把快捷键让给其他应用（仍可点托盘图标截图）"
+                                   Style="{StaticResource RowHint}"/>
+                    </StackPanel>
+                    <CheckBox Grid.Column="1" x:Name="CbHotkeyEnabled" VerticalAlignment="Center"/>
+                </Grid>
+
+                <Separator Margin="0,2,0,10">
+                    <Separator.Template>
+                        <ControlTemplate TargetType="Separator">
+                            <Border BorderBrush="#EFF2F5" BorderThickness="1" Height="1"/>
+                        </ControlTemplate>
+                    </Separator.Template>
+                </Separator>
+
+                <!-- 热键录制 -->
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="截图翻译" Style="{StaticResource RowLabel}"
+                               Margin="0,0,12,0"/>
+                    <Border Grid.Column="1" x:Name="HotkeyBorder" BorderBrush="#D0D7DE" BorderThickness="1"
+                            CornerRadius="6" Background="#FAFBFC" Padding="10,7"
+                            Cursor="Hand">
+                        <TextBlock x:Name="HotkeyText" Text="F1" FontSize="15" FontWeight="Bold"
+                                   Foreground="#2D7DD2" HorizontalAlignment="Center"/>
+                    </Border>
+                </Grid>
+                <TextBlock x:Name="HotkeyHint" Style="{StaticResource RowHint}" Margin="0,0,0,3">
+                    点击上方热键框后按下组合键（支持 Ctrl / Alt / Shift / Win + 字母 / 数字 / F键），按 Esc 取消。
+                </TextBlock>
+                <TextBlock x:Name="HotkeyError" FontSize="11" Foreground="#CF222E"
+                           TextWrapping="Wrap" Margin="0,0,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ══ 分组：翻译引擎 ══ -->
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <TextBlock Text="🌐 翻译引擎" Style="{StaticResource GroupTitle}"/>
+
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="引擎选择" Style="{StaticResource RowLabel}" Margin="0,0,12,0"/>
+                    <ComboBox Grid.Column="1" x:Name="CbEngine" VerticalAlignment="Center" FontSize="13">
+                        <ComboBoxItem Content="自动（推荐：已配置百度则用百度，否则用 MyMemory）" Tag="0"/>
+                        <ComboBoxItem Content="MyMemory 免费引擎（免注册，开箱即用）" Tag="1"/>
+                        <ComboBoxItem Content="百度翻译（需配置 AppID 与密钥）" Tag="2"/>
+                    </ComboBox>
+                </Grid>
+
+                <TextBlock Style="{StaticResource RowHint}" Margin="0,0,0,10">
+                    MyMemory 为免注册免费引擎（匿名 5000 词/天/IP），开箱即用；
+                    百度翻译质量更稳定，注册 fanyi-api.baidu.com 获取凭据填入下方即可。
+                </TextBlock>
+
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="百度 AppID" Style="{StaticResource RowLabel}" Margin="0,0,12,0"/>
+                    <TextBox Grid.Column="1" x:Name="TbBaiduAppId" Padding="8,6" FontSize="13"
+                             BorderBrush="#D0D7DE" BorderThickness="1" Background="#FAFBFC"/>
+                </Grid>
+                <Grid Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="百度密钥" Style="{StaticResource RowLabel}" Margin="0,0,24,0"/>
+                    <TextBox Grid.Column="1" x:Name="TbBaiduSecret" Padding="8,6" FontSize="13"
+                             BorderBrush="#D0D7DE" BorderThickness="1" Background="#FAFBFC"/>
+                </Grid>
+                <TextBlock x:Name="EngineHint" Style="{StaticResource RowHint}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ══ 分组：浮窗行为 ══ -->
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <TextBlock Text="🖼 浮窗行为" Style="{StaticResource GroupTitle}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="新一轮截图时自动关闭旧浮窗" Style="{StaticResource RowLabel}"/>
+                        <TextBlock Text="防止多个翻译浮窗堆满屏幕；关闭后每次截图结果独立保留"
+                                   Style="{StaticResource RowHint}"/>
+                    </StackPanel>
+                    <CheckBox Grid.Column="1" x:Name="CbClosePreviousPin" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- ══ 分组：通用 ══ -->
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <TextBlock Text="⚙ 通用" Style="{StaticResource GroupTitle}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="开机自动启动" Style="{StaticResource RowLabel}"/>
+                        <TextBlock Text="登录 Windows 后静默驻留系统托盘"
+                                   Style="{StaticResource RowHint}"/>
+                    </StackPanel>
+                    <CheckBox Grid.Column="1" x:Name="CbAutoStart" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- 底部按钮 -->
+        <Grid Margin="0,2,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Content="恢复默认" Style="{StaticResource SecondaryBtn}"
+                    Margin="0,0,10,0" Click="OnResetClick" ToolTip="热键恢复为 F1"/>
+            <Button Grid.Column="2" Content="保存" Style="{StaticResource PrimaryBtn}"
+                    Click="OnSaveClick"/>
+        </Grid>
+    </StackPanel>
+</Window>

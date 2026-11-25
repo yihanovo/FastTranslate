@@ -1,0 +1,65 @@
+<Window x:Class="SnapTranslate.Views.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SnapTranslate Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="True"
+        Cursor="Cross"
+        KeyDown="OnKeyDown">
+    <!-- 全屏遮罩窗口（设计文档 §4.3）：背景=冻结帧 + 半透明黑遮罩挖洞 -->
+    <Canvas x:Name="RootCanvas">
+        <Canvas.Resources>
+            <Style x:Key="HandleStyle" TargetType="Rectangle">
+                <Setter Property="Width" Value="10"/>
+                <Setter Property="Height" Value="10"/>
+                <Setter Property="Fill" Value="White"/>
+                <Setter Property="Stroke" Value="#FF2D7DD2"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Visibility" Value="Collapsed"/>
+                <Setter Property="Cursor" Value="SizeAll"/>
+            </Style>
+        </Canvas.Resources>
+
+        <!-- 1) 冻结帧：绑定铺满整个画布（Canvas 不自动拉伸子元素，必须显式绑定尺寸） -->
+        <Image x:Name="FrozenImage" Stretch="Fill"
+               Width="{Binding ActualWidth, ElementName=RootCanvas}"
+               Height="{Binding ActualHeight, ElementName=RootCanvas}"/>
+
+        <!-- 2) 遮罩：EvenOdd 挖洞 -->
+        <Path x:Name="MaskPath" Fill="#88000000"/>
+
+        <!-- 3) 选区边框 -->
+        <Border x:Name="SelectionBorder"
+                BorderBrush="#FF2D7DD2" BorderThickness="1.5"
+                Visibility="Collapsed"/>
+
+        <!-- 4) 尺寸提示 -->
+        <Border x:Name="SizeTip" Background="#CC1F2328" CornerRadius="3" Padding="6,3" Visibility="Collapsed">
+            <TextBlock x:Name="SizeTipText" Foreground="White" FontSize="12"/>
+        </Border>
+
+        <!-- 5) 浮动工具条（选区下方） -->
+        <Border x:Name="Toolbar" Background="White" CornerRadius="4" Padding="4" Visibility="Collapsed"
+                BorderBrush="#DDD0D7DE" BorderThickness="1">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnTranslate" Content="翻译" Click="OnTranslateClick" Padding="10,4" Margin="0,0,4,0"/>
+                <Button x:Name="BtnCopy" Content="复制图片" Click="OnCopyClick" Padding="10,4" Margin="0,0,4,0"/>
+                <Button x:Name="BtnCancel" Content="取消" Click="OnCancelClick" Padding="10,4"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 6) 8 个调整手柄 -->
+        <Rectangle x:Name="HandleNW" Style="{StaticResource HandleStyle}" Tag="NW"/>
+        <Rectangle x:Name="HandleN"  Style="{StaticResource HandleStyle}" Tag="N" Width="18"/>
+        <Rectangle x:Name="HandleNE" Style="{StaticResource HandleStyle}" Tag="NE"/>
+        <Rectangle x:Name="HandleE"  Style="{StaticResource HandleStyle}" Tag="E" Height="18"/>
+        <Rectangle x:Name="HandleSE" Style="{StaticResource HandleStyle}" Tag="SE"/>
+        <Rectangle x:Name="HandleS"  Style="{StaticResource HandleStyle}" Tag="S" Width="18"/>
+        <Rectangle x:Name="HandleSW" Style="{StaticResource HandleStyle}" Tag="SW"/>
+        <Rectangle x:Name="HandleW"  Style="{StaticResource HandleStyle}" Tag="W" Height="18"/>
+    </Canvas>
+</Window>

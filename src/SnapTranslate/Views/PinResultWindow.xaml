@@ -1,0 +1,96 @@
+<Window x:Class="SnapTranslate.Views.PinResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SnapTranslate"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Width="380"
+        SizeToContent="Height"
+        MaxWidth="480">
+    <Window.Resources>
+        <!-- 注意：StaticResource 必须先声明后使用，资源块必须在引用它的元素之前 -->
+        <Style x:Key="PinBtn" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#57606A"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg" Background="{TemplateBinding Background}" CornerRadius="3">
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#D8E1EA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- 钉屏结果浮窗（设计文档 §4.7）：不抢焦点、可拖动、翻译/复制/关闭 -->
+    <Border x:Name="Root"
+            Background="#F5F7FA"
+            BorderBrush="#D0D7DE" BorderThickness="1"
+            CornerRadius="6"
+            Margin="8">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.35"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- 拖动条/按钮 -->
+                <RowDefinition Height="Auto"/>  <!-- 原文 -->
+                <RowDefinition Height="Auto"/>  <!-- 译文 -->
+            </Grid.RowDefinitions>
+
+            <!-- Row 0：拖动区 + 操作按钮 -->
+            <Grid Grid.Row="0" Background="#EAEFF5" MouseLeftButtonDown="OnDragBarMouseDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="划屏即译" Foreground="#57606A" FontSize="11"
+                           Margin="10,6,4,6" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" x:Name="BtnRecapture" Content="↺ 再截取" Style="{StaticResource PinBtn}"
+                        Click="OnRecaptureClick" ToolTip="再截取一段内容翻译 (F1)"/>
+                <Button Grid.Column="2" x:Name="BtnCopy" Content="复制" Style="{StaticResource PinBtn}"
+                        Click="OnCopyClick" ToolTip="复制原文+译文"/>
+                <Button Grid.Column="3" x:Name="BtnRetry" Content="重试" Style="{StaticResource PinBtn}"
+                        Click="OnRetryClick" ToolTip="重新翻译"/>
+                <Button Grid.Column="4" x:Name="BtnClose" Content="✕" Style="{StaticResource PinBtn}"
+                        Click="OnCloseClick" ToolTip="关闭"/>
+            </Grid>
+
+            <!-- Row 1：原文（识别完成即显示，无占位状态） -->
+            <Border Grid.Row="1" Padding="12,10" MouseLeftButtonDown="OnDragBarMouseDown"
+                    Background="#FFFFFF" Margin="0,1,0,0">
+                <TextBlock x:Name="SourceText" TextWrapping="Wrap" FontSize="13"
+                           Foreground="#1F2328" LineHeight="20"
+                           Text=""/>
+            </Border>
+
+            <!-- Row 2：译文（翻译到达后填充，加载时保持空白） -->
+            <Border Grid.Row="2" Padding="12,10" Background="#FFFDF3"
+                    BorderBrush="#EAD8A5" BorderThickness="0,1,0,0">
+                <TextBlock x:Name="TargetText" TextWrapping="Wrap" FontSize="14"
+                           Foreground="#1F2328" LineHeight="22"
+                           Text=""/>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

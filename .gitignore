@@ -1,0 +1,15 @@
+# 构建产物
+bin/
+obj/
+publish/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# 运行时生成
+*.log
+
+.opencode/

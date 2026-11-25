@@ -1,0 +1,11 @@
+<Application x:Class="SnapTranslate.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             ShutdownMode="OnExplicitShutdown">
+    <!-- ShutdownMode=OnExplicitShutdown：无主窗口，由托盘菜单"退出"控制生命周期（设计文档 §4.9） -->
+    <Application.Resources>
+        <SolidColorBrush x:Key="AccentBrush" Color="#FF2D7DD2"/>
+        <SolidColorBrush x:Key="PinBackground" Color="#F5F7FA"/>
+        <SolidColorBrush x:Key="PinForeground" Color="#1F2328"/>
+    </Application.Resources>
+</Application>
