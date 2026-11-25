@@ -27,11 +27,13 @@ internal sealed class MyMemoryTranslationProvider
     private const int MaxRetries = 2;
 
     private readonly HttpClient _http;
+    private readonly ConfigService _config;
 
     public string Name => "MyMemory";
 
-    public MyMemoryTranslationProvider()
+    public MyMemoryTranslationProvider(ConfigService config)
     {
+        _config = config;
         _http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
         _http.DefaultRequestHeaders.UserAgent.ParseAdd("SnapTranslate/0.1 (screenshot translator)");
     }
@@ -51,6 +53,14 @@ internal sealed class MyMemoryTranslationProvider
             try
             {
                 var url = $"{Endpoint}?q={Uri.EscapeDataString(text)}&langpair={Uri.EscapeDataString(pair)}";
+
+                // de=邮箱：官方免费提额 5000 → 50000 字/天（可选，见 usagelimits.php）
+                var email = _config.GetMyMemoryEmail();
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    url += $"&de={Uri.EscapeDataString(email)}";
+                }
+
                 using var response = await _http.GetAsync(url, ct);
                 var json = await response.Content.ReadAsStringAsync(ct);
 

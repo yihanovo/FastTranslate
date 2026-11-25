@@ -18,6 +18,8 @@ public sealed class AppConfig
 
     /// <summary>翻译引擎：Auto（默认，百度优先）/ Baidu / MyMemory</summary>
     [JsonPropertyName("engine")] public int Engine { get; set; } = (int)TranslationEngine.Auto;
+
+    [JsonPropertyName("mymemory")] public MyMemoryConfig? MyMemory { get; set; }
 }
 
 public sealed class HotkeyConfig
@@ -58,6 +60,12 @@ public enum TranslationEngine
     Auto = 0,
     Baidu = 1,
     MyMemory = 2,
+}
+
+public sealed class MyMemoryConfig
+{
+    /// <summary>提额邮箱（de 参数）：5000 → 50000 字/天，可选</summary>
+    [JsonPropertyName("email")] public string Email { get; set; } = string.Empty;
 }
 
 public sealed class BaiduConfig
@@ -231,6 +239,24 @@ public sealed class ConfigService
         {
             var cfg = Load() ?? new AppConfig();
             cfg.Engine = (int)engine;
+            Save(cfg);
+        }
+    }
+
+    public string GetMyMemoryEmail()
+    {
+        lock (_sync)
+        {
+            return Load()?.MyMemory?.Email ?? string.Empty;
+        }
+    }
+
+    public void SetMyMemoryEmail(string email)
+    {
+        lock (_sync)
+        {
+            var cfg = Load() ?? new AppConfig();
+            cfg.MyMemory = new MyMemoryConfig { Email = email?.Trim() ?? string.Empty };
             Save(cfg);
         }
     }

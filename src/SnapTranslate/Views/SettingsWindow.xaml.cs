@@ -36,6 +36,7 @@ public partial class SettingsWindow : Window
         var baidu = _config.GetBaidu();
         TbBaiduAppId.Text = baidu.AppId;
         TbBaiduSecret.Text = baidu.IsConfigured ? "（已配置，留空保持不变）" : string.Empty;
+        TbMyMemoryEmail.Text = _config.GetMyMemoryEmail();
         UpdateEngineHint();
 
         // 录制：点击热键框进入监听
@@ -189,6 +190,9 @@ public partial class SettingsWindow : Window
         {
             _config.SetBaidu(appId, secret);   // DPAPI 加密落盘
         }
+
+        // MyMemory 提额邮箱（可选）
+        _config.SetMyMemoryEmail(TbMyMemoryEmail.Text);
 
         // 3) 行为/热键配置
         _config.SetHotkey(_binding);

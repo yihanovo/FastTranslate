@@ -47,7 +47,7 @@ public partial class App : System.Windows.Application
         var translator = new TranslationRouter(
             config,
             new BaiduTranslationProvider(config),
-            new MyMemoryTranslationProvider());
+            new MyMemoryTranslationProvider(config));
         _coordinator = new SelectionCoordinator(hotkey, capture, overlay, ocr, translator, config);
         _hotkey = hotkey;
         _config = config;

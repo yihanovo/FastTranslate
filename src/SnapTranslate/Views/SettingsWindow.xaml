@@ -157,6 +157,19 @@
                              BorderBrush="#D0D7DE" BorderThickness="1" Background="#FAFBFC"/>
                 </Grid>
                 <TextBlock x:Name="EngineHint" Style="{StaticResource RowHint}"/>
+
+                <Grid Margin="0,6,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="提额邮箱" Style="{StaticResource RowLabel}" Margin="0,0,12,0"/>
+                    <TextBox Grid.Column="1" x:Name="TbMyMemoryEmail" Padding="8,6" FontSize="13"
+                             BorderBrush="#D0D7DE" BorderThickness="1" Background="#FAFBFC"/>
+                </Grid>
+                <TextBlock Style="{StaticResource RowHint}" Margin="0,3,0,0">
+                    可选。填写邮箱可将 MyMemory 免费额度从 5000 字/天提升到 50000 字/天（官方 de 参数，无需验证邮箱）。
+                </TextBlock>
             </StackPanel>
         </Border>
 
