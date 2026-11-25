@@ -127,9 +127,10 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="引擎选择" Style="{StaticResource RowLabel}" Margin="0,0,12,0"/>
                     <ComboBox Grid.Column="1" x:Name="CbEngine" VerticalAlignment="Center" FontSize="13">
+                        <!-- Tag 必须与 TranslationEngine 枚举值一致：Auto=0, Baidu=1, MyMemory=2 -->
                         <ComboBoxItem Content="自动（推荐：已配置百度则用百度，否则用 MyMemory）" Tag="0"/>
-                        <ComboBoxItem Content="MyMemory 免费引擎（免注册，开箱即用）" Tag="1"/>
-                        <ComboBoxItem Content="百度翻译（需配置 AppID 与密钥）" Tag="2"/>
+                        <ComboBoxItem Content="百度翻译（质量更稳，需配置 AppID 与密钥）" Tag="1"/>
+                        <ComboBoxItem Content="MyMemory 免费引擎（免注册，开箱即用）" Tag="2"/>
                     </ComboBox>
                 </Grid>
 
